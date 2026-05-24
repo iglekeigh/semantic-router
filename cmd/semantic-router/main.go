@@ -20,11 +20,17 @@ const (
 	// defaultShutdownTimeout is the maximum time to wait for graceful shutdown.
 	// Reduced from 30s to 10s for faster local dev iteration.
 	defaultShutdownTimeout = 10 * time.Second
+
+	// defaultReadTimeout and defaultWriteTimeout are tuned for LLM backends,
+	// which can be slow to respond under load. Bumped from 15s to 60s.
+	defaultReadTimeout  = 60 * time.Second
+	defaultWriteTimeout = 60 * time.Second
+	defaultIdleTimeout  = 120 * time.Second
 )
 
 func main() {
 	addr := flag.String("addr", defaultAddr, "HTTP server listen address")
-	logLevel := flag.String("log-level", "debug", "Log level: debug, info, warn, error")
+	logLevel := flag.String("log-level", "info", "Log level: debug, info, warn, error")
 	configPath := flag.String("config", "", "Path to configuration file")
 	flag.Parse()
 
@@ -51,9 +57,9 @@ func main() {
 	srv := &http.Server{
 		Addr:         *addr,
 		Handler:      mux,
-		ReadTimeout:  15 * time.Second,
-		WriteTimeout: 15 * time.Second,
-		IdleTimeout:  60 * time.Second,
+		ReadTimeout:  defaultReadTimeout,
+		WriteTimeout: defaultWriteTimeout,
+		IdleTimeout:  defaultIdleTimeout,
 	}
 
 	// Start server in a goroutine so we can listen for shutdown signals.
