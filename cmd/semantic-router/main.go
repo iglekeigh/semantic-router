@@ -95,11 +95,11 @@ func main() {
 	defer cancel()
 
 	if err := srv.Shutdown(ctx); err != nil {
-		// Force close if graceful shutdown times out.
+		// Force-close if graceful shutdown times out or errors.
 		slog.Error("graceful shutdown failed, forcing close", "err", err)
 		_ = srv.Close()
 		os.Exit(1)
 	}
 
-	slog.Info("server stopped gracefully")
+	slog.Info("server stopped cleanly")
 }
