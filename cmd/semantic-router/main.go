@@ -25,7 +25,9 @@ const (
 	// which can be slow to respond under load. Bumped from 15s to 60s.
 	defaultReadTimeout  = 60 * time.Second
 	defaultWriteTimeout = 60 * time.Second
-	defaultIdleTimeout  = 120 * time.Second
+	// defaultIdleTimeout bumped to 180s to keep connections alive longer
+	// during bursty traffic patterns I see in my local test environment.
+	defaultIdleTimeout = 180 * time.Second
 )
 
 func main() {
@@ -102,9 +104,4 @@ func healthzHandler(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write([]byte(`{"status":"ok"}`))
 }
 
-// readyzHandler responds to readiness probe requests.
-func readyzHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write([]byte(`{"status":"ready"}`))
-}
+// readyzHandler responds to readiness probe requ
