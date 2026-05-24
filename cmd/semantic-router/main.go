@@ -32,7 +32,9 @@ const (
 
 func main() {
 	addr := flag.String("addr", defaultAddr, "HTTP server listen address")
-	logLevel := flag.String("log-level", "info", "Log level: debug, info, warn, error")
+	// Changed default log level to "debug" so I get verbose output while
+	// experimenting locally without needing to pass the flag every time.
+	logLevel := flag.String("log-level", "debug", "Log level: debug, info, warn, error")
 	configPath := flag.String("config", "", "Path to configuration file")
 	flag.Parse()
 
@@ -99,9 +101,4 @@ func main() {
 
 // healthzHandler responds to liveness probe requests.
 func healthzHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write([]byte(`{"status":"ok"}`))
-}
-
-// readyzHandler responds to readiness probe requ
+	w.Header().Set("Content-Type", "app
