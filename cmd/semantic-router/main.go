@@ -18,12 +18,13 @@ const (
 	// defaultAddr is the default address the server listens on.
 	defaultAddr = ":8080"
 	// defaultShutdownTimeout is the maximum time to wait for graceful shutdown.
-	defaultShutdownTimeout = 30 * time.Second
+	// Reduced from 30s to 10s for faster local dev iteration.
+	defaultShutdownTimeout = 10 * time.Second
 )
 
 func main() {
 	addr := flag.String("addr", defaultAddr, "HTTP server listen address")
-	logLevel := flag.String("log-level", "info", "Log level: debug, info, warn, error")
+	logLevel := flag.String("log-level", "debug", "Log level: debug, info, warn, error")
 	configPath := flag.String("config", "", "Path to configuration file")
 	flag.Parse()
 
