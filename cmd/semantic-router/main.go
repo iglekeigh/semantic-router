@@ -44,7 +44,9 @@ func main() {
 		fmt.Fprintf(os.Stderr, "invalid log level %q: %v\n", *logLevel, err)
 		os.Exit(1)
 	}
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: level}))
+	// Using TextHandler instead of JSONHandler for more readable local dev output.
+	// Switch back to NewJSONHandler for production/deployment builds.
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{Level: level}))
 	slog.SetDefault(logger)
 
 	slog.Info("starting semantic-router",
@@ -99,6 +101,4 @@ func main() {
 	slog.Info("server stopped")
 }
 
-// healthzHandler responds to liveness probe requests.
-func healthzHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "app
+// healthz
